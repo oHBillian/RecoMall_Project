@@ -44,29 +44,6 @@ const formSchema = z.object({
 
 type typeshortform = z.infer<typeof formSchema>;
 
-const frameworks = [
-  {
-    value: "next.js",
-    label: "Next.js",
-  },
-  {
-    value: "sveltekit",
-    label: "SvelteKit",
-  },
-  {
-    value: "nuxt.js",
-    label: "Nuxt.js",
-  },
-  {
-    value: "remix",
-    label: "Remix",
-  },
-  {
-    value: "astro",
-    label: "Astro",
-  },
-];
-
 interface SubcategoryFormprops {
   data: MainCategoriesType[];
 }
@@ -109,41 +86,43 @@ const SubcategoryForm: React.FC<SubcategoryFormprops> = ({ data }) => {
               className="w-[200px] justify-between"
             >
               {value
-                ? frameworks.find((framework) => framework.value === value)
-                    ?.label
+                ? data.find((category) => category.id.toString() === value)?.name
                 : "Select framework..."}
               <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-[200px] p-0 bg-white">
-            <Command>
-              <CommandInput placeholder="Search framework..." />
-              <CommandList>
-                <CommandEmpty>No framework found.</CommandEmpty>
-                <CommandGroup>
-                  {frameworks.map((framework) => (
-                    <CommandItem
-                      key={framework.value}
-                      value={framework.value}
-                      onSelect={(currentValue) => {
-                        setValue(currentValue === value ? "" : currentValue);
-                        setOpen(false);
-                      }}
-                    >
-                      <Check
-                        className={cn(
-                          "mr-2 h-4 w-4",
-                          value === framework.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
-                      />
-                      {framework.label}
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              </CommandList>
-            </Command>
+          <Command>
+          <CommandInput placeholder="Search framework..." />
+          <CommandList>
+            <CommandEmpty>No framework found.</CommandEmpty>
+            <CommandGroup>
+              {data.map((category) => (
+                <CommandItem
+                  key={category.id}
+                  value={category.name}
+                  onSelect={(currentValue) => {
+                    const selectedCategory = data.find((category) => category.name === currentValue);
+                    setValue(selectedCategory ? selectedCategory.id.toString() : "");
+                    setOpen(false);
+                  }}
+                  // onSelect={(currentValue) => {
+                  //   setValue(currentValue === value ? "" : currentValue)
+                  //   setOpen(false)
+                  // }}
+                >
+                  <Check
+                    className={cn(
+                      "mr-2 h-4 w-4",
+                      value === category.name ? "opacity-100" : "opacity-0"
+                    )}
+                  />
+                  {category.name}
+                </CommandItem>
+              ))}
+            </CommandGroup>
+          </CommandList>
+        </Command>
           </PopoverContent>
         </Popover>
       </div>
