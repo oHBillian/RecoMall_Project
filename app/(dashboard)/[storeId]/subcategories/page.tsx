@@ -12,17 +12,17 @@ const SubCategoryPage = async ({ params }: { params: { storeId: string } }) => {
       storeId: storeId,
     },
   });
+
   const subcategory = await prismadb.category.findMany({
     where: {
       storeId: storeId,
     },
     include: {
-      subcategories: true, // ดึง subcategories มาด้วย
+      subcategories: true,
     },
   });
 
   const subcategories = subcategory.flatMap(category => category.subcategories);
-  console.log(categories);
   return (
     <div className="w-full">
       <div className="flex justify-between">
