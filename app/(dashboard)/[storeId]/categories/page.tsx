@@ -11,6 +11,7 @@ const CategoryPage = async ({ params }: { params: { storeId: string } }) => {
     },
   });
 
+
   return (
     <div className="w-full">
       <div className="flex justify-between">

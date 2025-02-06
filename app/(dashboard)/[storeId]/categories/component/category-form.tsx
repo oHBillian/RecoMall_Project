@@ -16,6 +16,7 @@ import { Input } from "@/components/ui/input";
 import axios from "axios";
 import toast from "react-hot-toast";
 import { useParams } from "next/navigation";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, {
@@ -26,6 +27,7 @@ const formSchema = z.object({
 type typeshortform = z.infer<typeof formSchema>;
 
 const CategoryForm = () => {
+  const [loading,setLoading] = useState(false)
   const params = useParams();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -36,12 +38,15 @@ const CategoryForm = () => {
 
   async function onSubmit(value: typeshortform){
     try {
+      setLoading(true)
       const respone = await axios.post(`/api/${params.storeId}/categories`,value)
       toast.success("Create success")
       window.location.assign(`/${params.storeId}/categories`)
     } catch (error) {
       toast.error("Something went wrong");
       console.log(error)
+    }finally {
+      setLoading(false)
     }
   }
   return (
@@ -64,7 +69,7 @@ const CategoryForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit" className="ml-auto">
+          <Button type="submit" className="ml-auto" disabled={loading}>
             Submit
           </Button>
         </form>
