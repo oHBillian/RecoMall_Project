@@ -45,6 +45,11 @@ export function DataTable<TData, TValue>({
     },
   });
 
+  const [isMounted, setIsMounted] = React.useState(false)
+  React.useLayoutEffect(() => {
+    setIsMounted(true)
+  }, [])
+  if (!isMounted) return null
   return (
     <div>
       <div className="flex items-center py-4">
@@ -55,6 +60,7 @@ export function DataTable<TData, TValue>({
             table.getColumn(searchkey)?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
+          key="search-input"
         />
       </div>
       <div className="rounded-md border">
