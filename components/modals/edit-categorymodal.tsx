@@ -11,11 +11,9 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { useParams } from "next/navigation";
-import { useState } from "react";
+
 
 interface AlertModalprops {
   onConfirm: (value: string) => void;
@@ -24,6 +22,7 @@ interface AlertModalprops {
   title: string;
   description: string;
   oldName: string;
+  isLoading : boolean;
 }
 
 const formSchema = z.object({
@@ -41,9 +40,8 @@ const Editmodal: React.FC<AlertModalprops> = ({
   isOpen,
   title,
   description,
+  isLoading,
 }) => {
-  const [loading, setLoading] = useState(false);
-  const params = useParams();
   const form = useForm<typeshortform>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -82,10 +80,10 @@ const Editmodal: React.FC<AlertModalprops> = ({
                 />
                 {" "}
                 <div className="w-full flex pl-72">
-                <Button variant={"default"} className="ml-auto" onClick={onClose}>
+                <Button variant={"default"} className="ml-auto" disabled={isLoading} onClick={onClose}>
                   Cancle
                 </Button>
-                <Button type="submit" className="ml-auto" disabled={loading}>
+                <Button type="submit" className="ml-auto" disabled={isLoading}>
                   Submit
                 </Button>
                 </div>

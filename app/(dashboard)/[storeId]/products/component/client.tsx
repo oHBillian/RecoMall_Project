@@ -1,11 +1,11 @@
 import React from 'react'
-import { columns, MainCategoriesType } from './columns'
+import { columns, PruductType } from './columns'
 import { DataTable } from '@/components/ui/data-table'
-interface CategoryClientprops {
-    data: MainCategoriesType[]
+interface ProductClientprops {
+    data: PruductType[]
 }
 
-const CategoryClient:React.FC<CategoryClientprops> = ({data}) => {
+const CategoryClient:React.FC<ProductClientprops> = ({data}) => {
   
   const sortedData = React.useMemo(() => {
     return [...data].sort((a, b) => a.id - b.id);

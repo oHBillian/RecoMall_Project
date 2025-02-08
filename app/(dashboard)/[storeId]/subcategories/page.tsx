@@ -1,19 +1,14 @@
 import React from "react";
 import SubcategoryClient from "./component/client";
 import prismadb from "@/lib/prismadb";
-import SubcategoryForm from "./component/category-form";
+import SubcategoryForm from "./component/subcategory-form";
+
 
 const SubCategoryPage = async ({ params }: { params: { storeId: string } }) => {
 
   const { storeId } = await params;
 
-  const categories = await prismadb.category.findMany({
-    where: {
-      storeId: storeId,
-    },
-  });
-
-  const subcategory = await prismadb.category.findMany({
+  const CategoriesData = await prismadb.category.findMany({
     where: {
       storeId: storeId,
     },
@@ -22,7 +17,17 @@ const SubCategoryPage = async ({ params }: { params: { storeId: string } }) => {
     },
   });
 
-  const subcategories = subcategory.flatMap(category => category.subcategories);
+  const categories = CategoriesData.map(({id,name,storeId}) => ({id,name,storeId}))
+
+  const subcategories = CategoriesData.flatMap(category => 
+    category.subcategories.map(subcategory => ({
+      id: subcategory.id,
+      name: subcategory.name,
+      categoriesId: category.id,
+      categoryName: category.name 
+    }))
+  );
+  
   return (
     <div className="w-full">
       <div className="flex justify-between">
@@ -35,7 +40,7 @@ const SubCategoryPage = async ({ params }: { params: { storeId: string } }) => {
       <hr className="h-1 mt-3 mb-3 border-gray-300"></hr>
 
       <SubcategoryForm data={categories}/>
-      <SubcategoryClient data={subcategories} />
+      <SubcategoryClient data={subcategories} data2={categories}/>
     </div>
   );
 };
