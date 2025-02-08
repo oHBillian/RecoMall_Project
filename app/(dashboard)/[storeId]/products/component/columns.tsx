@@ -3,25 +3,20 @@
 import { ColumnDef } from "@tanstack/react-table"
 import CellAction from "./cell-action";
  
-export type SubCategoriesType = {
-  id: number; 
-  name: string; 
-  categoryName: string 
-  categoriesId? : number;
+export type PruductType = {
+  id: number;
+  name: string;
+  storeId: string;
 }
  
-export const columns: ColumnDef<SubCategoriesType>[] = [
+export const columns: ColumnDef<PruductType>[] = [
   {
     accessorKey: "id",
     header: "Id",
   },
   {
     accessorKey: "name",
-    header: "SubCategoryName",
-  },
-  {
-    accessorKey: "categoryName",
-    header: "Category",
+    header: "Name",
   },
   {
     accessorKey: "action",

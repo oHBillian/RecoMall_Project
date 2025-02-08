@@ -22,9 +22,9 @@ const MainSidebar =  () => {
       active: pathname === `/${params.storeId}/subcategories`,
     },
     {
-      href: `/${params.storeId}/product`,
+      href: `/${params.storeId}/products`,
       label: "Product",
-      active: pathname === `/${params.storeId}/product`,
+      active: pathname === `/${params.storeId}/products`,
     },
     {
       href: `/${params.storeId}/Setting`,

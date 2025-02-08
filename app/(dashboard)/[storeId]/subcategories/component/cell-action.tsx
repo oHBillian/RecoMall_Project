@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MainCategoriesType } from "./columns";
+import { SubCategoriesType } from "./columns";
 
 import {
   DropdownMenu,
@@ -10,22 +10,26 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
-import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Edit, MoreHorizontal, Trash } from "lucide-react";
 import AlertModal from "@/components/modals/alert-modal";
 import axios from "axios";
 import { useParams, useRouter } from "next/navigation";
 import toast from "react-hot-toast";
-import Editmodal from "@/components/modals/edit-categorymodal";
+import EditSubcategoryModal from "@/components/modals/edit-subcategorymodal";
+import { useSelector } from "react-redux";
+import { RootState } from "@/lib/store";
 
 interface CellActionprops {
-  data: MainCategoriesType;
+  data: SubCategoriesType;
+  
 }
 const CellAction: React.FC<CellActionprops> = ({ data }) => {
+  const SelectedcategoryId = useSelector((state: RootState) => state.subcategory?.id)
   const params = useParams();
   const router = useRouter();
   const [alertopen, setAlertopen] = useState(false);
   const [editopen, setEditopen] = useState(false);
-  const [loading,setLoading] = useState(false)
+  const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState<{
     id: number | null;
     name: string | null;
@@ -33,41 +37,43 @@ const CellAction: React.FC<CellActionprops> = ({ data }) => {
     id: null,
     name: null,
   });
-
-  const onCopy = (id: string) => {
-    navigator.clipboard.writeText(id);
-    toast.success("Category Id copied to the clipboard.");
-  };
+  const [selectedCategory, setSelectedCategory] = useState<{
+    categoryId: number | null;
+  }>({
+    categoryId: null,
+  });
 
   const onAlertConfirm = async () => {
     try {
       if (selectedItem.id === null) return;
-      setLoading(true)
-      await axios.delete(`/api/${params.storeId}/categories`, {
+      setLoading(true);
+      await axios.delete(`/api/${params.storeId}/subcategory`, {
         data: { deleteId: selectedItem.id },
       });
       toast.success("ลบสำเร็จ");
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
-      setLoading(false)
+      setLoading(false);
       setAlertopen(false);
       setSelectedItem({ id: null, name: null });
       router.refresh();
     }
   };
 
-  const onEditConfirm = async (value : string) => {
+  const onEditConfirm = async (value: string) => {
+    console.log(value);
     try {
       if (selectedItem.id === null) return;
       setLoading(true)
-      await axios.patch(`/api/${params.storeId}/categories`, {
-          UpdateId: selectedItem.id,
-          name: value 
+      await axios.patch(`/api/${params.storeId}/subcategory`, {
+          subcategoryId: selectedItem.id,
+          categoryId : SelectedcategoryId,
+          name: value
       });
       // ใช้ windwow.location เพราะปญหาตรง from
       toast.success("อัพเดทสำเร็จ");
-      window.location.assign(`/${params.storeId}/categories`)
+      window.location.assign(`/${params.storeId}/subcategories`)
     } catch (error) {
       toast.error("Something went wrong");
     } finally {
@@ -80,14 +86,15 @@ const CellAction: React.FC<CellActionprops> = ({ data }) => {
   return (
     <div>
       <AlertModal
-        title={`Are you sure to delete : ${selectedItem.name}`}
+        title={`Are you sure to delete Subcategory : ${selectedItem.name}`}
         description="'this action cant be'"
         onConfirm={onAlertConfirm}
         onClose={() => setAlertopen(false)}
         isOpen={alertopen}
         isLoading={loading}
       />
-      <Editmodal
+      <EditSubcategoryModal
+        selectedId={`${selectedCategory.categoryId}`}
         oldName={`${selectedItem.name}`}
         title={`Are you sure to Edit : ${selectedItem.name}`}
         description="'this action cant be'"
@@ -106,13 +113,14 @@ const CellAction: React.FC<CellActionprops> = ({ data }) => {
         <DropdownMenuContent className="bg-white">
           <DropdownMenuLabel>Actios</DropdownMenuLabel>
           <DropdownMenuSeparator />
-          <DropdownMenuItem onClick={() => onCopy(data.id.toString())}>
+          {/* <DropdownMenuItem onClick={() => onCopy(data.id.toString())}>
             <Copy className="mr-2 h-4 w-4" />
             Copy Id
-          </DropdownMenuItem>
+          </DropdownMenuItem> */}
           <DropdownMenuItem
             onClick={() => {
               setSelectedItem({ id: data.id, name: data.name });
+              setSelectedCategory({ categoryId: Number(data.categoriesId) });
               setEditopen(true);
             }}
           >
