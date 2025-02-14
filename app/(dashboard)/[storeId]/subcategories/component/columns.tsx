@@ -6,7 +6,7 @@ import CellAction from "./cell-action";
 export type SubCategoriesType = {
   id: number; 
   name: string; 
-  categoryName: string 
+  categoryName: string;
   categoriesId? : number;
 }
  

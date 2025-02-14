@@ -38,7 +38,7 @@ interface SubcategoryFormprops {
 }
 
 const SubcategoryForm: React.FC<SubcategoryFormprops> = ({ data }) => {
-  const categoryId = useSelector((state: RootState) => state.subcategory?.id)
+  const categoryId = useSelector((state: RootState) => state.selectorValue.categoryId)
   const params = useParams();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),

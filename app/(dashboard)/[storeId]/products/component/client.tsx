@@ -5,17 +5,14 @@ interface ProductClientprops {
     data: PruductType[]
 }
 
-const CategoryClient:React.FC<ProductClientprops> = ({data}) => {
-  
-  const sortedData = React.useMemo(() => {
-    return [...data].sort((a, b) => a.id - b.id);
-  }, [data]);
+const ProductClient:React.FC<ProductClientprops> = ({data}) => {
+
 
   return (
     <div className="container mx-auto py-4">
-    <DataTable searchkey={'name'} columns={columns} data={sortedData} />
+    <DataTable searchkey={'name'} columns={columns} data={data} />
   </div>
   )
 }
 
-export default CategoryClient
+export default ProductClient

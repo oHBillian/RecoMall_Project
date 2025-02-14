@@ -6,7 +6,6 @@ interface CategoryClientprops {
 }
 
 const CategoryClient:React.FC<CategoryClientprops> = ({data}) => {
-  
   const sortedData = React.useMemo(() => {
     return [...data].sort((a, b) => a.id - b.id);
   }, [data]);

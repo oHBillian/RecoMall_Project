@@ -24,7 +24,7 @@ interface CellActionprops {
   
 }
 const CellAction: React.FC<CellActionprops> = ({ data }) => {
-  const SelectedcategoryId = useSelector((state: RootState) => state.subcategory?.id)
+  const SelectedcategoryId = useSelector((state: RootState) => state.selectorValue.categoryId)
   const params = useParams();
   const router = useRouter();
   const [alertopen, setAlertopen] = useState(false);
