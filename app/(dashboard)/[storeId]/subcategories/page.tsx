@@ -15,16 +15,17 @@ const SubCategoryPage = async ({ params }: { params: { storeId: string } }) => {
     include: {
       subcategories: true,
     },
-  });
+  });  
 
-  const categories = CategoriesData.map(({id,name,storeId}) => ({id,name,storeId}))
+  console.log("CategoriesData", CategoriesData)
+  const categories = CategoriesData.map(({id,name,storeId,createdAt}) => ({id,name,storeId,createdAt: createdAt.toISOString()}))
 
   const subcategories = CategoriesData.flatMap(category => 
     category.subcategories.map(subcategory => ({
       id: subcategory.id,
       name: subcategory.name,
       categoriesId: category.id,
-      categoryName: category.name 
+      categoryName: category.name,
     }))
   );
   

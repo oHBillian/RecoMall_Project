@@ -11,7 +11,8 @@ interface CategoryClientprops {
 }
 
 const SubcategoryClient:React.FC<CategoryClientprops> = ({data,data2}) => {
-
+  // console.log("SubCategoryPage",data)
+  // console.log("SubCategoryPage2",data2)
   const dispatch = useDispatch()
 
   const sortedData = React.useMemo(() => {

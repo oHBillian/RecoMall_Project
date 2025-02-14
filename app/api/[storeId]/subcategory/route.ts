@@ -30,6 +30,17 @@ export async function POST(req:Request,{params} : {params : {storeId: string}, }
             return new NextResponse("No store found", {status: 404})
         }
 
+        const category = await prismadb.category.findFirst({
+            where: {
+                id: categoryId,
+                storeId: storeId
+            }
+        });
+        
+        if (!category) {
+            return new NextResponse("Category not found in this store", { status: 404 });
+        }
+
         if(!storeId){
             return new NextResponse("Store Id required", { status : 500});
         }
@@ -86,6 +97,20 @@ export async function PATCH(req:Request,{params} : {params : {storeId: string}, 
             return new NextResponse("Store Id required", { status : 500});
         }
 
+        const subcategory = await prismadb.subcategory.findFirst({
+            where: {
+                id: subcategoryId,
+                category: {
+                    storeId: storeId
+                }
+            }
+        });
+        
+        if (!subcategory) {
+            return new NextResponse("Subcategory not found in this store", { status: 404 });
+        }
+
+
         const categoryUpdate = await prismadb.subcategory.update({
             where: {
                 id: subcategoryId
@@ -129,6 +154,19 @@ export async function DELETE(req:Request,{params} : {params : {storeId: string},
 
         if(!storeId){
             return new NextResponse("Store Id required", { status : 500});
+        }
+
+        const subcategory = await prismadb.subcategory.findFirst({
+            where: {
+                id: deleteId,
+                category: {
+                    storeId: storeId
+                }
+            }
+        });
+        
+        if (!subcategory) {
+            return new NextResponse("Subcategory not found in this store", { status: 404 });
         }
 
         const mainCategory = await prismadb.subcategory.delete({

@@ -1,26 +1,54 @@
-import { Button } from "@/components/ui/button";
-import { Plus } from "lucide-react";
+import prismadb from "@/lib/prismadb";
 import React from "react";
+import CreateProductUi from "./component/ui/createProductUi";
+import { PruductType } from "./component/columns";
+import ProductClient from "./component/client";
 
-const ProductsPage = () => {
+
+const Products = async ({ params }: { params: { storeId: string } }) => {
+
+    const {storeId} = await params;
+    const products = await prismadb.product.findMany({
+      where: {
+        storeId: storeId
+      },
+      include: {
+        category: {
+          select: {
+            name: true
+          }
+        },
+        subcategory: {
+          select: {
+            name: true
+          }
+        },
+        Images: {
+          select: {
+            url: true
+          }
+        }
+      }
+    });
+    
+  const formattedProducts: PruductType[] = products.map((item) => ({
+    id: item.id,
+    name: item.name,
+    description: item.description,
+    price: item.price.toString(),
+    isFeatured: item.isFeatured,
+    categoryName: item.category.name,
+    subcategoryName: item.subcategory.name // เพิ่ม subcategory name ถ้าต้องการ
+  }));
   return (
     <div className="w-full">
-      <div className="flex justify-between items-center">
-        <div>
-          <span className="font-semibold text-2xl">Create Products</span>
-          <div className="mt-2">Create a Product description</div>
-        </div>
-        <div>
-          <Button><Plus />Add New</Button>
-        </div>
-      </div>
-
+      <CreateProductUi />
       <hr className="h-1 mt-3 mb-3 border-gray-300"></hr>
-      {/*     
-          <CategoryForm />
-          <CategoryClient data={maincategories} /> */}
+          
+          
+          <ProductClient data={formattedProducts} />
     </div>
   );
 };
 
-export default ProductsPage;
+export default Products;

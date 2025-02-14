@@ -13,7 +13,6 @@ import {
   FormItem,
   FormMessage,
 } from "@/components/ui/form";
-import SelectorEdit from "@/app/(dashboard)/[storeId]/subcategories/component/ui/selectorEdit";
 import { useSelector } from "react-redux";
 import { RootState } from "@/lib/store";
 import Selector from "@/app/(dashboard)/[storeId]/subcategories/component/ui/selector";

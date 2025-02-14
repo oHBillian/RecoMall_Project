@@ -21,25 +21,84 @@ model Store {
   updatedAt DateTime @updatedAt
   
   categories Category[]
+  Product    Product[]
 }
 
 model Category {
-  id        Int   @id @default(autoincrement())
+  id        Int      @id @default(autoincrement())
   name      String
-  store     Store    @relation(fields: [storeId],references: [id],onDelete: Cascade)
+  store     Store    @relation(fields: [storeId], references: [id], onDelete: Cascade)
   storeId   String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  subcategories  Subcategory[]
+  subcategories Subcategory[]
+  Product       Product[]
 }
 
-
 model Subcategory {
-  id         Int   @id @default(autoincrement())
+  id         Int       @id @default(autoincrement())
   name       String
   categoryId Int
-  category  Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  category   Category  @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  Product    Product[]
+}
+
+model Product {
+  id            String      @id @default(uuid())
+  name          String
+  description   String
+  price         Decimal
+  isFeatured    Boolean     @default(false)
+  store         Store       @relation(fields: [storeId], references: [id], onDelete: Cascade)
+  storeId       String      
+  category      Category    @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  categoryId    Int
+  subcategory   Subcategory @relation(fields: [subcategoryId], references: [id], onDelete: Cascade)
+  subcategoryId Int
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+
+  Images     Image[]
+  OrderItem OrderItem[]
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  product   Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id         String      @id @default(uuid())
+  userId     String
+  totalPrice Decimal
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  status     OrderStatus @default(PENDING)
+
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id        String  @id @default(uuid())
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+  quantity  Int
+  price     Decimal
+}
+
+enum OrderStatus {
+  PENDING // รอการชำระเงิน
+  PAID // ชำระเงินแล้ว
+  SHIPPED // กำลังจัดส่ง
+  DELIVERED // จัดส่งสำเร็จ
+  CANCELED // ยกเลิกคำสั่งซื้อ
 }

@@ -87,7 +87,7 @@ const CellAction: React.FC<CellActionprops> = ({ data }) => {
         isOpen={alertopen}
         isLoading={loading}
       />
-      <Editmodal
+      {/* <Editmodal
         oldName={`${selectedItem.name}`}
         title={`Are you sure to Edit : ${selectedItem.name}`}
         description="'this action cant be'"
@@ -95,7 +95,7 @@ const CellAction: React.FC<CellActionprops> = ({ data }) => {
         onClose={() => setEditopen(false)}
         isOpen={editopen}
         isLoading={loading}
-      />
+      /> */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="ghost" className="h-9 w-6 p-0">
@@ -111,19 +111,19 @@ const CellAction: React.FC<CellActionprops> = ({ data }) => {
             Copy Id
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => {
-              setSelectedItem({ id: data.id, name: data.name });
-              setEditopen(true);
-            }}
+             onClick={() => router.push(`/${params.storeId}/products/${data.id}`)
+             // setSelectedItem({ id: data.id, name: data.name });
+             // setAlertopen(true);
+           }
           >
             <Edit className="mr-2 h-4 w-4" />
             Edit
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => {
-              setSelectedItem({ id: data.id, name: data.name });
-              setAlertopen(true);
-            }}
+            onClick={() => router.push(`/${params.storeId}/products/${data.id}`)
+              // setSelectedItem({ id: data.id, name: data.name });
+              // setAlertopen(true);
+            }
           >
             <Trash className="mr-2 h-4 w-4" />
             Delete
